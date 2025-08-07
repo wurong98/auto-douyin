@@ -14,7 +14,12 @@ async def load_session(page):
 async def main():
     async with async_playwright() as p:
         # 替换为你本地的 Chrome 浏览器路径
-        executable_path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+        # 如果是linux 系统
+        print(os.name)
+        if os.name == 'posix':
+            executable_path = "/opt/google/chrome/google-chrome"
+        elif os.name == 'nt':
+            executable_path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
         
         # 启动浏览器并指定路径
         browser = await p.chromium.launch(
