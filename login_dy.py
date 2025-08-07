@@ -6,7 +6,7 @@ import pickle
 async def save_session(page):
     # 保存 session cookies
     cookies = await page.context.cookies()
-    with open('cookies.pkl', 'wb') as f:
+    with open('./.cache/cookies.pkl', 'wb') as f:
         pickle.dump(cookies, f)
 
 async def main():

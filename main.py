@@ -6,8 +6,8 @@ from task_1 import task_1
 
 async def load_session(page):
     # 加载 session cookies
-    if os.path.exists('cookies.pkl'):
-        with open('cookies.pkl', 'rb') as f:
+    if os.path.exists('.cache/cookies.pkl'):
+        with open('.cache/cookies.pkl', 'rb') as f:
             cookies = pickle.load(f)
         await page.context.add_cookies(cookies)
 
