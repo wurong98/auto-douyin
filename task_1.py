@@ -1,8 +1,8 @@
 import asyncio
 from playwright.async_api import Page
 import random
-
-
+from time_text_parser import parse_relative_time
+import time
 async def fetch_comments(page: Page):
     try:
         print("=== 获取评论区信息 ===")
@@ -12,7 +12,7 @@ async def fetch_comments(page: Page):
         await asyncio.sleep(2)
         comment_list_locator = page.locator('[data-e2e="comment-list"]')
         
-        # 检查是否找到评论区
+        # TODO 优化评论的抓取
         if await comment_list_locator.count() > 0:
             # 获取评论列表中的所有评论 data-e2e="comment-item"
             comments = await comment_list_locator.first.locator('[data-e2e="comment-item"]').all()
@@ -51,6 +51,8 @@ async def fetch_video_info(page: Page):
         await active_videos.wait_for(state="attached", timeout=300)  # 超过3秒没有找到元素则报错
         count = await active_videos.count() # 直播找不到活动视频 需要跳过
         
+        video_info = {}
+
         if count > 0:
             print(f"检测到 {count} 个活动视频")
             # 通常只有一个活动视频，但为了保险起见，我们使用第一个
@@ -73,14 +75,18 @@ async def fetch_video_info(page: Page):
                     
                     if await locator.count() > 0:
                         text = await locator.first.inner_text()
-                        print(f"{info_name}: {text}")
+                        video_info[info_name] = text
                     else:
                         print(f"未找到{info_name}元素")
                 except Exception as e:
                     print(f"获取{info_name}失败: {e}")
 
-            # TODO 获取该视频的评论区
-            await fetch_comments(page)
+            print("视频信息:\n", video_info)
+            
+            delat_time_second = time.time() - parse_relative_time(video_info["发布时间"]).timestamp() 
+            print(f"delta time: {delat_time_second}")
+            if delat_time_second < 24 * 60 * 60: # 24小时内的才抓评论
+                await fetch_comments(page)
         else:
             print("未找到当前活动视频，可能是直播")
             
