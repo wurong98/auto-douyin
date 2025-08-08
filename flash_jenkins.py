@@ -41,24 +41,36 @@ async def main():
 # L352507606047zx
 
 # L352507606046zw
+        # sn = [
+        #     SD82507f06205C5
+        #     SD82507f06206C6
+        #     SD82507f06207C7
+        #     SD82507f06208C8
+        #     SD82507f06209C9
+        #     SD82507f06210Ca
+        #     SD82507f06211Cb
+        #     SD82507f06212Cc
+        #     SD82508506256CU
+        # ]
         sn = [
-            "L352507606062zM",
-            "L352507606056zG",
-            "L352507606055zF",
-            "L352507606051zB",
-            "L352507606049zz",
-            "L352507606048zy",
-            "L352507606047zx",
-            "L352507606046zw"
+            "SD82507f06205C5",
+            "SD82507f06206C6",
+            "SD82507f06207C7",
+            # "SD82507f06208C8",
+            "SD82507f06209C9",
+            # "SD82507f06210Ca",
+            "SD82507f06211Cb",
+            # "SD82507f06212Cc",
+            "SD82508506256CU"
         ]
 
         for i in sn:
             print(i)
 
-            await page.goto("https://jenkins.autoxing.com/job/chassis-deploy-firmware/build?delay=0sec")
+            await page.goto("https://rb-home.autoxing.com/jenkins/job/axbot-deploy/build?delay=0sec")
 
             # 选择 firmware
-            await page.select_option('select[name="value"]', value="baseboard_canbus_stm32")
+            await page.select_option('select[name="value"]', value="master")
 
             # # 填写 SN
             await page.locator('div[name="parameter"]:has(input[name="name"][value="SN"]) input[name="value"]').fill(i)
@@ -70,11 +82,11 @@ async def main():
             # # 选择 TARGET_HOST
             # await page.select_option('select[name="value"] >> nth=1', value="tunnelglobal.autoxing.com")
 
-            # # 点击 Build 按钮
+            # # 点击 Build 按钮 
             await page.click('button:has-text("Build")')
 
             # 等待跳转或确认
-            await page.wait_for_timeout(2000)  # 可改为 wait_for_url / wait_for_response 更智能
+            await page.wait_for_timeout(1000)  # 可改为 wait_for_url / wait_for_response 更智能
 
 
 
